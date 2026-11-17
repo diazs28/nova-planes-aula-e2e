@@ -1,10 +1,10 @@
-# Pruebas funcionales E2E — Planes de Aula (rol Docente)
+# Pruebas funcionales E2E — Plataforma NOVA
 
-Automatización con **Cypress** de los casos funcionales del rol **Docente** en la aplicación **Planes de Aula** de la plataforma NOVA (Uniautónoma del Cauca). Acompaña al *Informe 1 — Pruebas funcionales* de la auditoría QA.
+Automatización con **Cypress** sobre [https://nova.uniautonoma.edu.co](https://nova.uniautonoma.edu.co) (Uniautónoma del Cauca). Incluye el plan de pruebas en [PLAN_PRUEBAS.md](./PLAN_PRUEBAS.md) y 5 suites E2E enfocadas en flujos reales de los distintos módulos de la plataforma.
 
 ## Requisitos
 - Node.js 22+ y npm
-- Acceso autorizado al rol Docente (token de sesión o credenciales de prueba)
+- Para `05-docente-planes-aula.cy.js`: acceso autorizado al rol Docente (token de sesión o credenciales activas)
 
 ## Instalación
 ```bash
@@ -12,42 +12,42 @@ npm install
 ```
 
 ## Credenciales (fuera del código)
-Las credenciales **no** se escriben en el código ni se suben al repositorio. Define una de estas opciones:
+Las credenciales **no** se escriben en los `.cy.js` ni se suben al repositorio. Copia `.env.example` o crea `cypress.env.json` (ignorado por Git):
 
-- **Token de sesión** (opción A): variable `CYPRESS_TOKEN`.
-- **Login por UI** (opción B): variables `CYPRESS_USER` y `CYPRESS_PASS`.
-
-En Windows (PowerShell):
-```bash
-$env:CYPRESS_TOKEN="<token>"
-```
-En Linux/macOS:
-```bash
-export CYPRESS_TOKEN="<token>"
-```
-También puedes crear `cypress.env.json` (está en `.gitignore`):
 ```json
-{ "TOKEN": "<token>" }
+{
+  "USER": "<correo-institucional>",
+  "PASS": "<contraseña>"
+}
+```
+O usando token de sesión:
+```json
+{
+  "TOKEN": "<access_token>"
+}
 ```
 
 ## Ejecutar
 ```bash
-npx cypress run     # modo consola: genera video y resultados
+npx cypress run     # modo consola: genera video y capturas
 npx cypress open    # modo interactivo
 ```
 
+Para correr solo las pruebas que no requieren sesión docente:
+```bash
+npx cypress run --spec "cypress/e2e/01-*.cy.js,cypress/e2e/02-*.cy.js,cypress/e2e/03-*.cy.js,cypress/e2e/04-*.cy.js"
+```
+
 ## Estructura y trazabilidad
-| Archivo | Casos cubiertos |
+| Archivo | Módulos cubiertos |
 |---|---|
-| `cypress/e2e/01-listado.cy.js` | CP-F-01, CP-F-02 |
-| `cypress/e2e/02-filtros-busqueda.cy.js` | CP-F-03, CP-F-09, DEF-01 |
-| `cypress/e2e/03-detalle.cy.js` | CP-F-04 |
-| `cypress/e2e/04-crear-plan.cy.js` | CP-F-05, CP-F-06, CP-F-07, CP-F-08, CP-F-10 |
-| `cypress/e2e/05-permisos.cy.js` | CP-F-11, CP-F-12 |
+| `cypress/e2e/01-portal-y-asistente.cy.js` | Portal principal, accesibilidad (`Alt + A`), asistente virtual y políticas |
+| `cypress/e2e/02-acceso-y-permisos.cy.js` | Login, recuperación de contraseña, registro y protección de rutas privadas |
+| `cypress/e2e/03-pqrs-y-certificados.cy.js` | Radicación PQRS, consulta de radicado, solicitud y consulta de certificados |
+| `cypress/e2e/04-servicios-institucionales.cy.js` | Directorio de contactos, manual de usuario, convocatorias y elecciones |
+| `cypress/e2e/05-docente-planes-aula.cy.js` | Panel Docente: Planes de Aula (`DEF-01`), Quiz, Mis Tickets y Mi Perfil |
 
 ## Notas
-- Los **selectores** son de partida (basados en la UI observada: `select` de Estado, `input[placeholder*="Buscar"]`, botones “Nuevo plan”, “Guardar”, “Enviar a revisión”). Ajústalos a `data-*` si el equipo de desarrollo los añade, para pruebas más estables.
-- El caso `DEF-01` está escrito para **fallar** mientras el defecto exista (el contador “Total” no refleja el filtro); al corregirse, pasará.
-- Los casos que **modifican datos reales** (crear/enviar a revisión definitivos) se dejan como verificación de validación, sin confirmar el guardado, para no alterar datos de producción.
-- La evidencia de ejecución son los **videos** y **capturas** que Cypress genera en `cypress/videos` y `cypress/screenshots`.
-- Reparte el historial de commits por archivo de prueba para reflejar el aporte de cada integrante.
+- En Windows, si `ELECTRON_RUN_AS_NODE` está definido en la terminal, límpialo antes de ejecutar Cypress (`Remove-Item Env:ELECTRON_RUN_AS_NODE -ErrorAction SilentlyContinue`).
+- Los formularios que alteran datos reales se verifican hasta sus validaciones previas para no ensuciar el entorno de producción.
+- La evidencia de ejecución queda en `cypress/videos/` y `cypress/screenshots/`.
