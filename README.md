@@ -27,6 +27,9 @@ O usando token de sesión:
 }
 ```
 
+- `USER` es el correo completo (`@uniautonoma.edu.co`). Si tiene un error de formato, el login no se envía y todas las suites del rol Docente fallan.
+- `TOKEN` es el token de acceso de una sesión iniciada (el valor que la app guarda en `sessionStorage` como `access_token`). Caduca, así que hay que renovarlo.
+
 ## Ejecutar
 ```bash
 npx cypress run     # modo consola: genera video y capturas
@@ -38,6 +41,14 @@ Para correr solo las pruebas que no requieren sesión docente:
 npx cypress run --spec "cypress/e2e/01-*.cy.js,cypress/e2e/02-*.cy.js,cypress/e2e/03-*.cy.js,cypress/e2e/04-*.cy.js"
 ```
 
+> **Terminal de VS Code:** si Cypress falla al arrancar con `Invalid or incompatible cached data (cachedDataRejected)`, es porque la terminal hereda la variable `ELECTRON_RUN_AS_NODE`. Ejecuta desde una terminal fuera de VS Code o quita la variable:
+> ```bash
+> env -u ELECTRON_RUN_AS_NODE npx cypress run                                   # Git Bash
+> ```
+> ```powershell
+> Remove-Item Env:ELECTRON_RUN_AS_NODE -ErrorAction SilentlyContinue; npx cypress run  # PowerShell
+> ```
+
 ## Estructura y trazabilidad
 | Archivo | Módulos cubiertos |
 |---|---|
@@ -48,6 +59,5 @@ npx cypress run --spec "cypress/e2e/01-*.cy.js,cypress/e2e/02-*.cy.js,cypress/e2
 | `cypress/e2e/05-docente-planes-aula.cy.js` | Panel Docente: Planes de Aula (`DEF-01`), Quiz, Mis Tickets y Mi Perfil |
 
 ## Notas
-- En Windows, si `ELECTRON_RUN_AS_NODE` está definido en la terminal, límpialo antes de ejecutar Cypress (`Remove-Item Env:ELECTRON_RUN_AS_NODE -ErrorAction SilentlyContinue`).
 - Los formularios que alteran datos reales se verifican hasta sus validaciones previas para no ensuciar el entorno de producción.
 - La evidencia de ejecución queda en `cypress/videos/` y `cypress/screenshots/`.
