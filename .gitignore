@@ -3,6 +3,8 @@ cypress/videos/
 cypress/screenshots/
 cypress/downloads/
 informes/
+# Registros de herramientas locales
+.playwright-mcp/
 # Secretos: nunca versionar
 cypress.env.json
 .env
