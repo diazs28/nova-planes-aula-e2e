@@ -2,6 +2,7 @@ node_modules/
 cypress/videos/
 cypress/screenshots/
 cypress/downloads/
+informes/
 # Secretos: nunca versionar
 cypress.env.json
 .env

@@ -13,7 +13,7 @@ describe('Portal principal, accesibilidad y asistente', () => {
     cy.visit('/');
     cy.get('button[aria-label="Opciones de accesibilidad (Alt + A)"]').click();
 
-    cy.contains(/tama[ñn]o de texto/i).should('be.visible');
+    cy.contains('Tamaño de texto').should('be.visible');
     cy.contains('button', 'A++').click();
     cy.contains('button', 'Alto contraste').click();
     cy.contains('button', 'Subrayar enlaces').click();
