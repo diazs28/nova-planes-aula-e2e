@@ -13,7 +13,7 @@ describe('Servicios institucionales: directorio, manual, convocatorias y eleccio
     cy.get('input[placeholder*="Buscar por nombre"]')
       .type(this.datos.dependenciaContacto)
       .should('have.value', this.datos.dependenciaContacto);
-    cy.contains(/planeaci[oó]n/i).should('be.visible');
+    cy.contains('Planeación').should('be.visible');
 
     cy.get('input[placeholder*="Buscar por nombre"]')
       .clear()
