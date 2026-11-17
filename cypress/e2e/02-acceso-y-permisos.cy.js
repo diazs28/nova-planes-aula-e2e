@@ -15,7 +15,7 @@ describe('Acceso, registro, recuperación y protección de rutas', () => {
     cy.get('#email').clear().type('usuario.inexistente@uniautonoma.edu.co');
     cy.contains('button[type="submit"]', 'Iniciar Sesión').click();
     cy.wait('@loginApi').its('response.statusCode').should('be.oneOf', [400, 401]);
-    cy.contains(/error de autenticación|no active account|credenciales/i).should('be.visible');
+    cy.contains('Error de autenticación').should('be.visible');
   });
 
   it('navega a recuperación de contraseña y valida el correo antes de enviar', () => {

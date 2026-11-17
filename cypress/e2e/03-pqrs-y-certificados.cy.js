@@ -7,11 +7,11 @@ describe('Módulo PQRS, consulta de radicado y certificados', () => {
     cy.visit('/pqrs');
     cy.contains('Atención y Servicio').should('be.visible');
 
-    ['PETICIÓN', 'QUEJA', 'RECLAMO', 'SUGERENCIA', 'FELICITACIÓN'].forEach((tipo) => {
-      cy.contains('h3', new RegExp(tipo, 'i')).scrollIntoView().should('be.visible');
+    ['Petición', 'Queja', 'Reclamo', 'Sugerencia', 'Felicitación'].forEach((tipo) => {
+      cy.contains('h3', tipo).scrollIntoView().should('be.visible');
     });
 
-    cy.contains('h3', /petici[oó]n/i).click();
+    cy.contains('h3', 'Petición').click();
     cy.get('#asunto').should('be.visible');
     cy.get('#descripcion').should('be.visible');
     cy.get('input[name="modalidadRadicacion"]').should('have.length', 2);
@@ -34,9 +34,9 @@ describe('Módulo PQRS, consulta de radicado y certificados', () => {
 
     cy.wait('@consultaRadicado').then(({ response }) => {
       expect(response.statusCode).to.eq(404);
-      expect(response.body.detail).to.match(/no existe/i);
+      expect(response.body.detail).to.include('No existe');
     });
-    cy.contains(/radicado no encontrado|no existe pqrs/i).should('be.visible');
+    cy.contains('Radicado no encontrado').should('be.visible');
 
     cy.contains('a', 'Consultar certificado')
       .should('have.attr', 'href')
@@ -67,6 +67,6 @@ describe('Módulo PQRS, consulta de radicado y certificados', () => {
     cy.contains('button[type="submit"]', 'Consultar').click();
 
     cy.wait('@consultarCertificado').its('response.statusCode').should('be.oneOf', [400, 404]);
-    cy.contains(/no se encontr[oó]|no existe/i).should('be.visible');
+    cy.contains('No se encontró la solicitud').should('be.visible');
   });
 });
