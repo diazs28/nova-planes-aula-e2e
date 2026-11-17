@@ -73,4 +73,36 @@ describe('Panel docente: Planes de Aula, Tickets, Quiz y Perfil', () => {
     cy.url().should('include', 's=perfil');
     cy.contains('Cambiar contraseña').should('be.visible');
   });
+
+  describe('Mis Tickets', () => {
+    beforeEach(() => {
+      cy.irA('tickets');
+    });
+
+    it('muestra la sección de tickets', () => {
+      cy.contains('Mis Tickets').should('be.visible');
+    });
+
+    it('abre el formulario de nuevo ticket con sus campos', () => {
+      cy.contains('button', 'Nuevo Ticket').click();
+      cy.contains('Enviar ticket a un área').should('be.visible');
+      cy.contains('Área destino').should('be.visible');
+      cy.contains('Asunto').should('be.visible');
+      cy.contains('Descripción').should('be.visible');
+      cy.contains('label', 'Prioridad').parent().find('select')
+        .find('option').should('have.length.greaterThan', 1);
+    });
+
+    it('permite seleccionar un área destino', () => {
+      cy.contains('button', 'Nuevo Ticket').click();
+      cy.contains('label', 'Área destino').parent().find('select').select('Financiera');
+      cy.contains('label', 'Área destino').parent().find('select').should('not.have.value', '');
+    });
+
+    it('no envía un ticket sin los campos obligatorios', () => {
+      cy.contains('button', 'Nuevo Ticket').click();
+      cy.contains('button', /enviar/i).click();
+      cy.contains('Enviar ticket a un área').should('be.visible');
+    });
+  });
 });
